@@ -42,7 +42,7 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
     return (
         <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex justify-center items-center z-50">
             <div ref={modalRef} className="bg-gray-700 p-6 rounded-lg shadow-xl w-full max-w-xl relative">
-                <button className="absolute top-2 right-2 text-red-400" onClick={onClose}><MdOutlineCancel  className='text-2xl'/></button>
+                <button className="absolute top-2 right-2 text-red-400" onClick={onClose}><MdOutlineCancel className='text-2xl' /></button>
 
                 {error ? (
                     <p className="text-red-500">{error}</p>
@@ -108,7 +108,7 @@ const TeacherSearch = () => {
                     placeholder="Enter Teacher Initial (e.g. MM)"
                     value={teacher}
                     onChange={(e) => setTeacher(e.target.value.toUpperCase())}
-                    className="px-4 w-1/3 py-2 border border-gray-300 rounded"
+                    className="px-4 w-full md:w-1/3 py-2 border border-gray-300 rounded"
                 />
                 <button
                     onClick={() => setSelectedTeacher(teacher)}

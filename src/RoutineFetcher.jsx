@@ -135,7 +135,7 @@ const RoutineFetcher = () => {
                     placeholder="Enter Section (e.g. 61_N)"
                     value={section}
                     onChange={handleSectionChange}
-                    className="flex w-1/3 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <datalist id="section-options">
                     {filteredSuggestions.map((sec, index) => (
