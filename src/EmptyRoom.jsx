@@ -62,7 +62,7 @@ const EmptyRoom = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-6 mt-6 bg-[#29303d] text-white rounded-xl shadow">
+        <div className="max-w-3xl mx-auto p-6 mt-6 bg-[#29303d] text-white rounded shadow">
             <h2 className="text-2xl font-bold mb-4 text-center">Find Empty Rooms</h2>
 
             {/* Time Selection */}

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { TeacherModal } from './TeacherModal';
 import { AnimatePresence, motion } from 'framer-motion';
+import { FaRegCalendarCheck } from "react-icons/fa6";
+import relaxLottie from '../src/assets/Meditation.json';
+import Lottie from 'lottie-react';
 
 const RoutineFetcher = () => {
     const [section, setSection] = useState('');
@@ -106,7 +109,7 @@ const RoutineFetcher = () => {
         return nextDate.toLocaleDateString('en-US', {
             day: '2-digit',
             month: 'long',
-            year: 'numeric',
+            // year: 'numeric',
         });
     };
 
@@ -125,17 +128,18 @@ const RoutineFetcher = () => {
 
 
     return (
-        <div className="mx-auto bg-[#29303d] text-white p-6 mt-10 rounded shadow">
-            <h1 className="text-2xl font-semibold mb-4 text-center">📅 View Class Routine</h1>
+        <div className="mx-auto bg-[#29303d] text-white p-6 mt-2 rounded shadow">
+            <h1 className="text-2xl flex justify-center gap-2 items-center font-semibold mb-7 text-center"><FaRegCalendarCheck /> View Class Routine</h1>
 
-            <div className="flex gap-2 mb-4">
+            <div className="flex w-full mx-auto md:w-2/3 justify-center gap-2 mb-4">
                 <input
                     type="text"
+                    maxLength={10}
                     list="section-options"
                     placeholder="Enter Section (e.g. 61_N)"
                     value={section}
                     onChange={handleSectionChange}
-                    className="flex w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <datalist id="section-options">
                     {filteredSuggestions.map((sec, index) => (
@@ -169,7 +173,7 @@ const RoutineFetcher = () => {
                                 whileTap={{ scale: 0.95 }}
                                 whileHover={{ scale: 1.05 }}
                                 onClick={() => setSelectDay(day)}
-                                className={`px-1 md:px-4 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
+                                className={`px-1 w-full md:px-4 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
                 ${selectDay === day
                                         ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'
                                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
@@ -192,7 +196,7 @@ const RoutineFetcher = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.5 }}
-                                className="border border-gray-600  rounded-xl shadow-sm p-4 mt-4"
+                                className="border border-gray-600 rounded-xl shadow-sm p-4 mt-4"
                             >
                                 <h2 className="text-lg text-center font-semibold text-[#83aff0] mb-4">
                                     {selectDay} ({getNextDateForDay(selectDay)})
@@ -208,35 +212,75 @@ const RoutineFetcher = () => {
                                                 transition={{ duration: 0.3, delay: idx * 0.05 }}
                                                 className="bg-gray-700 p-3 rounded-lg shadow hover:shadow-lg transition"
                                             >
-                                                <div className="font-semibold text-[#83aff0] text-xl mb-1">
-                                                    {cls.course_code} – {cls.course_title}
-                                                </div>
-                                                <div className="text-md text-white flex gap-5">
-                                                    <div className='flex flex-col gap-1'>
-                                                        <span>Time &nbsp; &nbsp; &nbsp;  : </span>
-                                                        <span>Room  &nbsp; &nbsp; :</span>
-                                                        <span>Teacher &nbsp;:</span>
-                                                        <span>Section &nbsp;:</span>
-                                                    </div>
-                                                    <div className='flex flex-col gap-1'>
-                                                        <span><span>{formatTime(cls.start_time)} - {formatTime(cls.end_time)}</span>
-                                                        </span>
-                                                        <span>  {cls.room}</span>
-                                                        <span
-                                                            className="text-[#83aff0] cursor-pointer"
-                                                            onClick={() => setSelectedTeacher(cls.teacher)}
-                                                        >
-                                                            {cls.teacher}
-                                                        </span>
-                                                        <span>{cls.section}</span>
-                                                    </div>
 
+                                                <div className='flex items-center gap-5'>
+                                                    <div>
+                                                        <span className='flex flex-col'>
+                                                            <span>{formatTime(cls.start_time)}</span>
+                                                            <span className='my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1.5 mb-2 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span></span>
+                                                            <span>{formatTime(cls.end_time)}</span>
+                                                        </span>
+                                                    </div>
+                                                    <div className="text-md text-white flex flex-col gap-4">
+                                                        <div className="font-semibold text-[#83aff0] text-xl">
+                                                            {cls.course_title}
+                                                        </div>
+                                                        <div className='flex gap-3'>
+                                                            <div className='flex flex-col text-gray-400 gap-1'>
+                                                                {/* <span>Time &nbsp; &nbsp; &nbsp;  : </span> */}
+                                                                <span>Course  </span>
+                                                                <span>Room  </span>
+                                                                <span>Teacher </span>
+                                                                <span>Section </span>
+                                                            </div>
+                                                            <div className='flex flex-col gap-1'>
+                                                                <span>:</span>
+                                                                <span>:</span>
+                                                                <span>:</span>
+                                                                <span>:</span>
+                                                            </div>
+                                                            <div className='flex flex-col gap-1'>
+                                                                {/* <span><span>{formatTime(cls.start_time)} - {formatTime(cls.end_time)}</span>
+                                                            </span> */}
+                                                                {cls.course_code}
+                                                                <span>  {cls.room}</span>
+                                                                <span
+                                                                    className="text-[#83aff0] cursor-pointer font-semibold"
+                                                                    onClick={() => setSelectedTeacher(cls.teacher)}
+                                                                >
+                                                                    {cls.teacher}
+                                                                </span>
+                                                                <span>{cls.section}</span>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
                                                 </div>
+
                                             </motion.div>
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-white text-center text-xl"> Alright, no class on {selectDay}. Go and enjoy!</p>
+
+                                    <div className='flex flex-col items-center justify-center mt-6'>
+                                        
+                                        <Lottie
+                                            animationData={relaxLottie}
+                                            loop={true}
+                                            autoplay={selectDay !== null} // Play when a day is selected
+                                            style={{ width: 200, height: 200 }} // Adjust size as needed
+                                        />
+                                        <p className="text-white text-center text-xl"> Alright, no class on {selectDay}. Go and enjoy!
+                                        </p>
+                                    </div>
+
                                 )}
                             </motion.div>
                         )}

@@ -100,7 +100,7 @@ const TeacherSearch = () => {
     const [selectedTeacher, setSelectedTeacher] = useState(null);
 
     return (
-        <div className="mx-auto bg-[#29303d]  p-6 mt-10 rounded shadow">
+        <div className="mx-auto max-w-3xl bg-[#29303d]  p-6 mt-10 rounded shadow">
             <h2 className="text-xl font-bold mb-4">🔍 Search Teacher by Initial</h2>
             <div className="flex gap-2 mb-4">
                 <input

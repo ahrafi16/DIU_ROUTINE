@@ -43,7 +43,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#1a1c23] text-white mx-auto md:px-50">
+    <div className="min-h-screen flex flex-col bg-[#1a1c23] text-white mx-auto md:px-70">
       {/* Topbar (Desktop only) */}
       <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-2 p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
         <div className="flex items-center space-x-3">
@@ -55,7 +55,7 @@ function App() {
 
       <div className="flex-1 flex flex-col md:flex-row">
         {/* Sidebar (Desktop only) */}
-        <div className="hidden md:block w-64 bg-[#2b2f3a] p-6 space-y-4">
+        <div className="hidden md:block w-64 bg-[#29303d] p-6 space-y-4">
           <button
             onClick={() => setActiveSection('routine')}
             className={`w-full text-left px-4 py-2 rounded hover:bg-indigo-600 ${activeSection === 'routine' ? 'bg-indigo-700 font-semibold' : ''
@@ -80,7 +80,7 @@ function App() {
         </div>
 
         {/* Main Content (desktop) */}
-        <div className="flex-1 p-4 hidden md:block">
+        <div className="flex-1 pt-4 pl-4 hidden md:block">
           {renderSection()}
         </div>
 
