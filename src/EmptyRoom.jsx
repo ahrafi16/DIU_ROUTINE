@@ -57,12 +57,12 @@ const EmptyRoom = () => {
         return today.toLocaleDateString("en-US", {
             day: "2-digit",
             month: "long",
-            year: "numeric",
+            // year: "numeric",
         });
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-6 mt-6 bg-[#29303d] text-white rounded shadow">
+        <div className="max-w-3xl mx-auto p-6 mt-2 bg-[#29303d] text-white rounded shadow">
             <h2 className="text-2xl font-bold mb-4 text-center">Find Empty Rooms</h2>
 
             {/* Time Selection */}
@@ -88,14 +88,14 @@ const EmptyRoom = () => {
 
             {/* Day Cards */}
             {!loading && (
-                <div className="flex gap-1 md:gap-2 overflow-x-auto pb-4">
+                <div className="flex gap-1 md:gap-2 overflow-x-visible pb-4">
                     {weekdays.map((day) => (
                         <motion.button
                             key={day}
                             whileTap={{ scale: 0.95 }}
                             whileHover={{ scale: 1.05 }}
                             onClick={() => setSelectedDay(day)}
-                            className={`px-2 md:px-4 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
+                            className={`px-2 w-full md:px-4 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
                 ${selectedDay === day
                                     ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'
                                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}

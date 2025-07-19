@@ -20,12 +20,43 @@ const RoutineFetcher = () => {
     const [filteredSuggestions, setFilteredSuggestions] = useState([]);
 
     useEffect(() => {
+        if (routine && section) {
+            localStorage.setItem('routineData', JSON.stringify(routine));
+            localStorage.setItem('selectedSection', section);
+        }
+    }, [routine, section]);
+
+    useEffect(() => {
+        const savedRoutine = localStorage.getItem('routineData');
+        const savedSection = localStorage.getItem('selectedSection');
+        const savedDay = localStorage.getItem('selectedDay');
+
+        if (savedRoutine && savedSection) {
+            setRoutine(JSON.parse(savedRoutine));
+            setSection(savedSection);
+            if (savedDay) {
+                setSelectDay(savedDay);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        if (selectDay) {
+            localStorage.setItem('selectedDay', selectDay);
+        }
+    }, [selectDay]);
+
+
+
+    useEffect(() => {
         const fetchSections = async () => {
             try {
                 const res = await fetch('https://diu.zahidp.xyz/api/sections');
                 const data = await res.json();
-                if (data.status === 'Success') {
+                // console.log("Sections Data", data);
+                if (data.status?.toLowerCase() === 'success') {
                     setAllSections(data.data || []);
+                    // console.log('All sections:', data.data);
                 }
             } catch (err) {
                 console.error("Error fetching sections:", err);
@@ -34,14 +65,22 @@ const RoutineFetcher = () => {
         fetchSections();
     }, []);
 
+
     const handleSectionChange = (e) => {
-        const value = e.target.value.toUpperCase();
+        const value = e.target.value.toString().toUpperCase();
         setSection(value);
 
-        // Filter suggestions from previously searched sections only (sectionHistory)
-        const matches = sectionHistory.filter(sec => sec.startsWith(value));
+        if (value.length >= 1 && allSections.length > 0) {
+            const matches = allSections.filter((sec) =>
+                sec.toUpperCase().startsWith(value)
+            );
+            // console.log("Matching sections:", matches);
+            setFilteredSuggestions(matches);
+        } else {
+            setFilteredSuggestions([]);
+        }
 
-        setFilteredSuggestions(matches);
+
     };
 
 
@@ -57,7 +96,16 @@ const RoutineFetcher = () => {
 
         setLoading(true);
         setError('');
-        setRoutine(null);
+        if (section !== localStorage.getItem('selectedSection')) {
+            setRoutine(null);
+        }
+        if (routine && section && selectDay) {
+            localStorage.setItem('routineData', JSON.stringify(routine));
+            localStorage.setItem('selectedSection', section);
+            localStorage.setItem('selectedDay', selectDay);
+        }
+
+
 
         try {
             const response = await fetch(`https://diu.zahidp.xyz/api/routine?section=${section}`);
@@ -120,39 +168,73 @@ const RoutineFetcher = () => {
         return date.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: true,
+            hour12: false,
         });
     };
 
     const weekdays = ['SATURDAY', 'SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY'];
 
+    const getTimeDifference = (start, end) => {
+        const [startH, startM] = start.split(':').map(Number);
+        const [endH, endM] = end.split(':').map(Number);
+
+        const startTotalMins = startH * 60 + startM;
+        const endTotalMins = endH * 60 + endM;
+
+        const diff = endTotalMins - startTotalMins;
+        const hours = Math.floor(diff / 60);
+        const mins = diff % 60;
+
+        return { hours, mins, total: diff };
+    };
 
     return (
         <div className="mx-auto bg-[#29303d] text-white p-6 mt-2 rounded shadow">
             <h1 className="text-2xl flex justify-center gap-2 items-center font-semibold mb-7 text-center"><FaRegCalendarCheck /> View Class Routine</h1>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault(); // Prevents page reload
+                    handleFetchRoutine();
+                }}
+                className="flex w-full mx-auto md:w-2/3 justify-center gap-2 mb-4"
+            >
+                <div className="relative w-full md:w-2/3 mx-auto mb-4">
+                    <div className='flex items-center gap-2'>
+                        <input
+                            type="text"
+                            placeholder="Enter Section (61_N)"
+                            value={section}
+                            onChange={handleSectionChange}
+                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <button
+                            type="submit"
+                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer transition"
+                        >
+                            Search
+                        </button>
+                    </div>
+                    {filteredSuggestions.length > 0 && (
+                        <ul className="md:absolute z-10 bg-black/50 w-1/2 mt-1 border border-gray-300 rounded shadow max-h-60 overflow-y-auto">
+                            {filteredSuggestions.map((sec, index) => (
+                                <li
+                                    key={index}
+                                    onClick={() => {
+                                        setSection(sec);
+                                        setFilteredSuggestions([]);
+                                    }}
+                                    className="px-4 py-2 hover:bg-gray-500 cursor-pointer"
+                                >
+                                    {sec}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
 
-            <div className="flex w-full mx-auto md:w-2/3 justify-center gap-2 mb-4">
-                <input
-                    type="text"
-                    maxLength={10}
-                    list="section-options"
-                    placeholder="Enter Section (e.g. 61_N)"
-                    value={section}
-                    onChange={handleSectionChange}
-                    className="flex w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <datalist id="section-options">
-                    {filteredSuggestions.map((sec, index) => (
-                        <option key={index} value={sec} />
-                    ))}
-                </datalist>
-                <button
-                    onClick={handleFetchRoutine}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer transition"
-                >
-                    Search
-                </button>
-            </div>
+
+            </form>
+
 
             {loading && <button disabled type="button" className="text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
                 <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -166,7 +248,7 @@ const RoutineFetcher = () => {
             {routine && (
                 <>
                     {/* Day Cards */}
-                    <div className="flex gap-1 md:gap-2 overflow-x-auto mt-6 pb-4">
+                    <div className="flex gap-1 md:gap-2 overflow-x-visible mt-6 pb-4">
                         {weekdays.map((day) => (
                             <motion.button
                                 key={day}
@@ -196,7 +278,7 @@ const RoutineFetcher = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.5 }}
-                                className="border border-gray-600 rounded-xl shadow-sm p-4 mt-4"
+                                className="border w-full border-gray-600 rounded-xl shadow-sm p-4 mt-4"
                             >
                                 <h2 className="text-lg text-center font-semibold text-[#83aff0] mb-4">
                                     {selectDay} ({getNextDateForDay(selectDay)})
@@ -215,7 +297,7 @@ const RoutineFetcher = () => {
 
                                                 <div className='flex items-center gap-5'>
                                                     <div>
-                                                        <span className='flex flex-col'>
+                                                        <span className='flex text-sm md:text-md flex-col'>
                                                             <span>{formatTime(cls.start_time)}</span>
                                                             <span className='my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
                                                             <span className='my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
@@ -229,7 +311,7 @@ const RoutineFetcher = () => {
                                                         </span>
                                                     </div>
                                                     <div className="text-md text-white flex flex-col gap-4">
-                                                        <div className="font-semibold text-[#83aff0] text-xl">
+                                                        <div className="font-semibold text-[#83aff0] md:text-md">
                                                             {cls.course_title}
                                                         </div>
                                                         <div className='flex gap-3'>
@@ -270,14 +352,14 @@ const RoutineFetcher = () => {
                                 ) : (
 
                                     <div className='flex flex-col items-center justify-center mt-6'>
-                                        
+
                                         <Lottie
                                             animationData={relaxLottie}
                                             loop={true}
                                             autoplay={selectDay !== null} // Play when a day is selected
                                             style={{ width: 200, height: 200 }} // Adjust size as needed
                                         />
-                                        <p className="text-white text-center text-xl"> Alright, no class on {selectDay}. Go and enjoy!
+                                        <p className="text-white text-center text-xl">No class on {selectDay}. Recharge yourself !
                                         </p>
                                     </div>
 

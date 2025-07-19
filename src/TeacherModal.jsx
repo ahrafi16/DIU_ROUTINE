@@ -33,7 +33,7 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
                     setError('No data found');
                 }
             } catch (e) {
-                setError('Failed to fetch data');
+                setError('Failed to fetch data',e);
             }
         };
         fetchInfo();
@@ -96,27 +96,84 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
 };
 
 const TeacherSearch = () => {
+    const [allInitials, setAllInitials] = useState([]);
     const [teacher, setTeacher] = useState('');
     const [selectedTeacher, setSelectedTeacher] = useState(null);
 
+    useEffect(() => {
+        const fetchInitials = async () => {
+            try {
+                const res = await fetch('https://diu.zahidp.xyz/api/teachers');
+                const data = await res.json();
+                if (data.status === 'success') {
+                    setAllInitials(data.data);
+                }
+            } catch (error) {
+                console.error('Error fetching initials:', error);
+            }
+        };
+        fetchInitials();
+    }, []);
+
+    const filteredSuggestions = teacher.length >= 1
+        ? allInitials.filter((initial) =>
+            initial.toLowerCase().startsWith(teacher.toLowerCase())
+        )
+        : [];
+
+
     return (
-        <div className="mx-auto max-w-3xl bg-[#29303d]  p-6 mt-10 rounded shadow">
-            <h2 className="text-xl font-bold mb-4">🔍 Search Teacher by Initial</h2>
-            <div className="flex gap-2 mb-4">
-                <input
-                    type="text"
-                    placeholder="Enter Teacher Initial (e.g. MM)"
-                    value={teacher}
-                    onChange={(e) => setTeacher(e.target.value.toUpperCase())}
-                    className="px-4 w-full md:w-1/3 py-2 border border-gray-300 rounded"
-                />
-                <button
-                    onClick={() => setSelectedTeacher(teacher)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer transition"
-                >
-                    Search
-                </button>
-            </div>
+        <div className="mx-auto max-w-3xl bg-[#29303d]  p-6 mt-2 rounded shadow">
+            <h2 className="text-2xl flex justify-center font-bold mb-7">🔍 Search Teacher by Initial</h2>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    if (teacher.trim() !== '') {
+                        setSelectedTeacher(teacher);
+                    }
+                }}
+                className="flex w-full mx-auto md:w-2/3 justify-center gap-2 mb-4"
+            >
+                <div className="relative w-full md:w-2/3 mx-auto mb-4">
+                    <div className='flex items-center gap-2'>
+                        <input
+                            type="text"
+                            placeholder="Teacher Initial (e.g. MM)"
+                            value={teacher}
+                            onChange={(e) => setTeacher(e.target.value.toUpperCase())}
+                            className="px-4 py-2 w-full border border-gray-300 rounded"
+                        />
+                        <button
+                            type="submit"
+                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer transition"
+                        >
+                            Search
+                        </button>
+                    </div>
+
+                    {filteredSuggestions.length > 0 && (
+                        <ul className="md:absolute z-10 bg-black/50 w-1/2 mt-1 border border-gray-300 rounded shadow max-h-60 overflow-y-auto">
+                            {filteredSuggestions.map((initial, index) => (
+                                <li
+                                    key={index}
+                                    onClick={() => {
+                                        setTeacher(initial);
+                                    }}
+                                    className="px-4 py-2 hover:bg-gray-500 cursor-pointer"
+                                >
+                                    {initial}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+
+
+                </div>
+
+
+
+            </form>
+
             {selectedTeacher && (
                 <TeacherModal
                     teacherInitial={selectedTeacher}
