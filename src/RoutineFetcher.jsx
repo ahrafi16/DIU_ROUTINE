@@ -310,25 +310,25 @@ const RoutineFetcher = () => {
                                                             <span>{formatTime(cls.end_time)}</span>
                                                         </span>
                                                     </div>
-                                                    <div className="text-md text-white flex flex-col gap-4">
+                                                    <div className="text-md text-white flex flex-col gap-2 md:gap-6">
                                                         <div className="font-semibold text-[#83aff0] text-sm md:text-md">
                                                             {cls.course_title}
                                                         </div>
                                                         <div className='flex gap-3'>
-                                                            <div className='flex text-sm md:text-base flex-col text-gray-400 gap-1'>
+                                                            <div className='flex text-sm md:text-md flex-col text-gray-400 gap-1'>
                                                                 {/* <span>Time &nbsp; &nbsp; &nbsp;  : </span> */}
                                                                 <span>Course  </span>
                                                                 <span>Room  </span>
                                                                 <span>Teacher </span>
                                                                 <span>Section </span>
                                                             </div>
-                                                            <div className='flex text-sm md:text-base flex-col gap-1'>
+                                                            <div className='flex text-sm md:text-md flex-col gap-1'>
                                                                 <span>:</span>
                                                                 <span>:</span>
                                                                 <span>:</span>
                                                                 <span>:</span>
                                                             </div>
-                                                            <div className='flex text-sm md:text-base flex-col gap-1'>
+                                                            <div className='flex text-sm md:text-md flex-col gap-1'>
                                                                 {/* <span><span>{formatTime(cls.start_time)} - {formatTime(cls.end_time)}</span>
                                                             </span> */}
                                                                 {cls.course_code}
