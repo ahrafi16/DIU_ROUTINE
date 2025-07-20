@@ -299,19 +299,19 @@ const RoutineFetcher = () => {
                                                     <div>
                                                         <span className='flex text-sm md:text-md flex-col'>
                                                             <span>{formatTime(cls.start_time)}</span>
-                                                            <span className='my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
-                                                            <span className='my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
-                                                            <span className='my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
-                                                            <span className='my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
-                                                            <span className='my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
-                                                            <span className='my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
-                                                            <span className='my-1.5 mb-2 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
+                                                            <span className='my-1 md:my-1.5 mb-2 h-0.5 bg-gray-500 rounded-2xl'></span>
                                                             <span></span>
                                                             <span>{formatTime(cls.end_time)}</span>
                                                         </span>
                                                     </div>
                                                     <div className="text-md text-white flex flex-col gap-4">
-                                                        <div className="font-semibold text-[#83aff0] md:text-md">
+                                                        <div className="font-semibold text-[#83aff0] text-sm md:text-md">
                                                             {cls.course_title}
                                                         </div>
                                                         <div className='flex gap-3'>

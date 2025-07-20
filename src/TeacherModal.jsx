@@ -40,7 +40,7 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
     }, [teacherInitial]);
 
     return (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex justify-center items-center z-50">
+        <div className="fixed m-1 inset-0 backdrop-blur-sm bg-black/30 flex justify-center items-center z-50">
             <div ref={modalRef} className="bg-gray-700 p-6 rounded-lg shadow-xl w-full max-w-xl relative">
                 <button className="absolute top-2 right-2 text-red-400" onClick={onClose}><MdOutlineCancel className='text-2xl' /></button>
 
