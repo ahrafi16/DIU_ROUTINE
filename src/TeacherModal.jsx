@@ -33,7 +33,7 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
                     setError('No data found');
                 }
             } catch (e) {
-                setError('Failed to fetch data',e);
+                setError('Failed to fetch data', e);
             }
         };
         fetchInfo();
@@ -106,7 +106,8 @@ const TeacherSearch = () => {
                 const res = await fetch('https://diu.zahidp.xyz/api/teachers');
                 const data = await res.json();
                 if (data.status === 'success') {
-                    setAllInitials(data.data);
+                    setAllInitials(data.data.map(t => t.teacher));
+                    console.log("Data", data.data);
                 }
             } catch (error) {
                 console.error('Error fetching initials:', error);
