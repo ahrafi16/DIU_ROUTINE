@@ -315,20 +315,20 @@ const RoutineFetcher = () => {
                                                             {cls.course_title}
                                                         </div>
                                                         <div className='flex gap-3'>
-                                                            <div className='flex flex-col text-gray-400 gap-1'>
+                                                            <div className='flex text-sm md:text-base flex-col text-gray-400 gap-1'>
                                                                 {/* <span>Time &nbsp; &nbsp; &nbsp;  : </span> */}
                                                                 <span>Course  </span>
                                                                 <span>Room  </span>
                                                                 <span>Teacher </span>
                                                                 <span>Section </span>
                                                             </div>
-                                                            <div className='flex flex-col gap-1'>
+                                                            <div className='flex text-sm md:text-base flex-col gap-1'>
                                                                 <span>:</span>
                                                                 <span>:</span>
                                                                 <span>:</span>
                                                                 <span>:</span>
                                                             </div>
-                                                            <div className='flex flex-col gap-1'>
+                                                            <div className='flex text-sm md:text-base flex-col gap-1'>
                                                                 {/* <span><span>{formatTime(cls.start_time)} - {formatTime(cls.end_time)}</span>
                                                             </span> */}
                                                                 {cls.course_code}
