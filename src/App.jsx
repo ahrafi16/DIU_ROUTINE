@@ -32,6 +32,7 @@ import RoutineFetcher from './RoutineFetcher';
 import { TeacherSearch } from './TeacherModal';
 import logo from "../src/assets/logo.png";
 import EmptyRoom from './EmptyRoom';
+import ExamRoutine from './ExamRoutine';
 
 function App() {
   const [activeSection, setActiveSection] = useState('routine');
@@ -40,6 +41,7 @@ function App() {
     if (activeSection === 'routine') return <RoutineFetcher />;
     if (activeSection === 'teacher') return <TeacherSearch />;
     if (activeSection === 'empty') return <EmptyRoom />;
+    if (activeSection === 'examroutine') return <ExamRoutine />;
   };
 
   return (
@@ -77,6 +79,13 @@ function App() {
           >
             Empty Room
           </button>
+          <button
+            onClick={() => setActiveSection('examroutine')}
+            className={`w-full text-left px-4 py-2 rounded hover:bg-orange-600 ${activeSection === 'examroutine' ? 'bg-orange-700 font-semibold' : ''
+              }`}
+          >
+            Exam Routine
+          </button>
         </div>
 
         {/* Main Content (desktop) */}
@@ -111,6 +120,13 @@ function App() {
                 }`}
             >
               Empty Room
+            </button>
+            <button
+              onClick={() => setActiveSection('examroutine')}
+              className={`flex-1 text-center rounded-2xl py-3 text-sm font-medium transition ${activeSection === 'examroutine' ? 'bg-orange-600 font-semibold' : 'hover:bg-[#3b3f4a]'
+                }`}
+            >
+              Exam Routine
             </button>
           </div>
 

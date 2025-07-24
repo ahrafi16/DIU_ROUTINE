@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { MdOutlineCancel } from "react-icons/md";
+import TeacherCard from './teacherCard';
 const TeacherModal = ({ teacherInitial, onClose }) => {
     const [info, setInfo] = useState(null);
     const [error, setError] = useState('');
@@ -107,7 +108,7 @@ const TeacherSearch = () => {
                 const data = await res.json();
                 if (data.status === 'success') {
                     setAllInitials(data.data.map(t => t.teacher));
-                    console.log("Data", data.data);
+                    // console.log("Data", data.data);
                 }
             } catch (error) {
                 console.error('Error fetching initials:', error);
@@ -131,6 +132,7 @@ const TeacherSearch = () => {
                     e.preventDefault();
                     if (teacher.trim() !== '') {
                         setSelectedTeacher(teacher);
+                        setTeacher('');
                     }
                 }}
                 className="flex w-full mx-auto md:w-2/3 justify-center gap-2 mb-4"
@@ -139,7 +141,7 @@ const TeacherSearch = () => {
                     <div className='flex items-center gap-2'>
                         <input
                             type="text"
-                            placeholder="Teacher Initial (e.g. MM)"
+                            placeholder="Teacher Initial (MFZ)"
                             value={teacher}
                             onChange={(e) => setTeacher(e.target.value.toUpperCase())}
                             className="px-4 py-2 w-full border border-gray-300 rounded"
@@ -176,10 +178,11 @@ const TeacherSearch = () => {
             </form>
 
             {selectedTeacher && (
-                <TeacherModal
-                    teacherInitial={selectedTeacher}
-                    onClose={() => setSelectedTeacher(null)}
-                />
+                // <TeacherModal
+                //     teacherInitial={selectedTeacher}
+                //     onClose={() => setSelectedTeacher(null)}
+                // />
+                <TeacherCard teacherInitial={selectedTeacher} />
             )}
         </div>
     );

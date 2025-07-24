@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 const timeOptions = ["08:30", "10:00", "11:30", "01:00", "02:30", "04:00"];
 const weekdays = ["SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"];
@@ -9,6 +10,7 @@ const EmptyRoom = () => {
     const [emptyRooms, setEmptyRooms] = useState({});
     const [selectedDay, setSelectedDay] = useState("");
     const [loading, setLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const fetchEmptyRooms = (time) => {
         setLoading(true);
@@ -67,18 +69,95 @@ const EmptyRoom = () => {
 
             {/* Time Selection */}
             <div className="mb-6 flex gap-3 items-center">
-                <label className="font-semibold">Select Time:</label>
-                <select
-                    className="border border-gray-500 text-red-50 font-bold rounded p-2"
-                    value={selectedTime}
-                    onChange={(e) => setSelectedTime(e.target.value)}
-                >
-                    {timeOptions.map((time) => (
-                        <option className="bg-stone-700" key={time} value={time}>
-                            {time}
-                        </option>
-                    ))}
-                </select>
+                <label className="font-semibold">Select Time :</label>
+                {/* <div className="relative inline-block w-26">
+                    <select
+                        className="appearance-none w-full border border-gray-500 text-red-50 font-bold rounded p-2 "
+                        value={selectedTime}
+                        onChange={(e) => setSelectedTime(e.target.value)}
+                    >
+                        {timeOptions.map((time) => (
+                            <option className="bg-stone-700" key={time} value={time}>
+                                {time}
+                            </option>
+                        ))}
+                    </select>
+
+                    <div className="pointer-events-none absolute inset-y-0 right-1 flex items-center text-white">
+                        <RiArrowDropDownLine className="text-2xl" />
+                    </div>
+                </div> */}
+
+                {/* New dropdown */}
+                {/* <div class="relative inline-block">
+                    <button id="menu-button" type="button" aria-expanded="true" aria-haspopup="true" class="inline-flex w-full justify-center gap-x-1.5 rounded-md  px-3 py-2 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inse">
+                        Options
+                        <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
+                            <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <div role="menu" tabindex="-1" aria-labelledby="menu-button" aria-orientation="vertical" class="absolute right-0 z-10 mt-2 w-24 origin-top-right rounded-md bg-black/90 shadow-lg ring-1 ring-black/5 focus:outline-hidden">
+                        <div role="none" class="py-1">
+                            {timeOptions.map((time) => (
+                                <a id="menu-item-0" key={time} role="menuitem" href="#" tabindex="-1" class="block px-4 py-2 text-sm hover:bg-red-400 text-white">{time}</a>
+                            ))}
+                        </div>
+                    </div>
+                </div> */}
+                <div className="relative inline-block w-24">
+                    <button
+                        id="menu-button"
+                        type="button"
+                        aria-expanded={isOpen}
+                        aria-haspopup="true"
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="group inline-flex w-full justify-center gap-x-4 rounded-md px-3 py-2 text-sm font-semibold text-gray-400 hover:text-white shadow-xs ring-1 ring-gray-300 ring-inset cursor-pointer"
+                    >
+                        <span className="group-hover:text-white text-gray-400">
+                            {selectedTime}
+                        </span>
+                        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" className="-mr-0.5 size-5 group-hover:text-white text-gray-400">
+                            <path
+                                fillRule="evenodd"
+                                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    </button>
+
+                    {isOpen && (
+                        <div
+                            role="menu"
+                            tabIndex="-1"
+                            aria-labelledby="menu-button"
+                            aria-orientation="vertical"
+                            className="absolute right-0 z-10 mt-2 w-24 origin-top-right rounded-md bg-black/90 shadow-lg ring-1 ring-black/5 focus:outline-none"
+                        >
+                            <div role="none" className="py-1">
+                                {timeOptions.map((time) => (
+                                    <a
+                                        key={time}
+                                        href="#"
+                                        role="menuitem"
+                                        tabIndex="-1"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setSelectedTime(time);
+                                            setIsOpen(false);
+                                        }}
+                                        className="block px-4 py-2 text-sm hover:bg-gray-700 text-white"
+                                    >
+                                        {time}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* New dropdown */}
+
             </div>
 
             {/* Loading Spinner */}
