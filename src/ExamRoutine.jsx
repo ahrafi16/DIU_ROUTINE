@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import examLottie from "../../diu-routine/src/assets/coming_soon.json";
+import examLottie from "./assets/coming_soon.json";
 
 const ExamRoutine = () => {
     return (
