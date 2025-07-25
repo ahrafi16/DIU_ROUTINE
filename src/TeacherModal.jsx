@@ -125,7 +125,7 @@ const TeacherSearch = () => {
 
 
     return (
-        <div className="mx-auto max-w-3xl bg-[#29303d]  p-6 mt-2 rounded shadow">
+        <div className="mx-auto bg-[#29303d]  p-6 mt-2 rounded shadow">
             <h2 className="text-2xl flex justify-center font-bold mb-7">🔍 Search Teacher by Initial</h2>
             <form
                 onSubmit={(e) => {

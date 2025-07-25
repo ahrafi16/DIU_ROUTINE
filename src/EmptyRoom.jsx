@@ -163,22 +163,30 @@ const EmptyRoom = () => {
             {/* Loading Spinner */}
             {loading && (
                 // <p className="text-center text-lg">Loading...</p>
-                <div className="px-2 w-full flex justify-between md:px-4 py-2 rounded-md text-xs md:text-sm font-semibold animate-pulse">
-                    <div className="border border-gray-600 w-fit px-4 py-2 rounded-md">
+                <div className="px-2 w-full flex justify-between gap-1 md:gap-2 md:px-4 py-2 rounded-md text-xs md:text-sm font-semibold animate-pulse">
+                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
                         <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-12 md:w-24 bg-gray-500 rounded mx-auto"></div>
+                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
                     </div>
-                    <div className="border border-gray-600 w-fit px-4 py-2 rounded-md">
+                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
                         <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-12 md:w-24 bg-gray-500 rounded mx-auto"></div>
+                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
                     </div>
-                    <div className="border border-gray-600 w-fit px-4 py-2 rounded-md">
+                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
                         <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-12 md:w-24 bg-gray-500 rounded mx-auto"></div>
+                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
                     </div>
-                    <div className="border border-gray-600 w-fit px-4 py-2 rounded-md">
+                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
                         <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-12 md:w-24 bg-gray-500 rounded mx-auto"></div>
+                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
+                    </div>
+                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
+                        <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
+                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
+                    </div>
+                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
+                        <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
+                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
                     </div>
                 </div>
 
