@@ -61,7 +61,7 @@ function App() {
 
       <div className="flex-1 flex flex-col md:flex-row">
         {/* Sidebar (Desktop only) */}
-        <div className="hidden md:block w-64 bg-[#29303d] p-6 space-y-4">
+        <div className="hidden md:block w-64 flex-shrink-0 bg-[#29303d] p-6 space-y-4">
           <button
             onClick={() => setActiveSection('routine')}
             className={`w-full text-left px-4 py-2 rounded cursor-pointer hover:bg-indigo-600 ${activeSection === 'routine' ? 'bg-indigo-700 font-semibold' : ''
@@ -93,7 +93,7 @@ function App() {
         </div>
 
         {/* Main Content (desktop) */}
-        <div className="flex-1 pt-4 pl-4 hidden md:block">
+        <div className="flex-1 pt-4 pl-4 hidden md:block overflow-auto">
           {renderSection()}
         </div>
 
