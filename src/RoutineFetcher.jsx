@@ -363,7 +363,13 @@ const RoutineFetcher = () => {
                                                 key={idx}
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                                // transition={{ duration: 0.3, delay: idx * 0.05, ease: "easeInOut" }}
+                                                transition={{
+                                                    type: "spring",
+                                                    stiffness: 60, // lower = smoother
+                                                    damping: 50,    // higher = less bounce
+                                                    delay: idx * 0.05
+                                                }}
                                                 className="bg-gray-700 p-3 rounded-lg shadow hover:shadow-lg transition"
                                             >
 
@@ -383,7 +389,7 @@ const RoutineFetcher = () => {
                                                         </span>
                                                     </div>
                                                     <div className="text-md text-white flex flex-col gap-2 md:gap-6">
-                                                        <div className="font-semibold text-[#83aff0] text-sm md:text-md">
+                                                        <div className="font-semibold text-[#83aff0] text-sm md:text-lg">
                                                             {cls.course_title}
                                                         </div>
                                                         <div className='flex gap-3'>
