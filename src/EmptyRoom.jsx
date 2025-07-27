@@ -201,7 +201,7 @@ const EmptyRoom = () => {
                             whileTap={{ scale: 0.95 }}
                             whileHover={{ scale: 1.05 }}
                             onClick={() => setSelectedDay(day)}
-                            className={`px-2 w-full md:px-4 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
+                            className={`px-2 w-full md:px-1 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
                 ${selectedDay === day
                                     ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'
                                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}

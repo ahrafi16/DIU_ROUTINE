@@ -327,7 +327,7 @@ const RoutineFetcher = () => {
                                 whileTap={{ scale: 0.95 }}
                                 whileHover={{ scale: 1.05 }}
                                 onClick={() => setSelectDay(day)}
-                                className={`px-1 w-full md:px-4 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
+                                className={`px-1 w-full md:px-1 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
                 ${selectDay === day
                                         ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'
                                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
