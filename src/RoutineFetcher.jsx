@@ -100,55 +100,6 @@ const RoutineFetcher = () => {
 
 
 
-    // const handleFetchRoutine = async () => {
-    //     if (!section.trim()) return;
-
-    //     if (!sectionHistory.includes(section)) {
-    //         const updatedHistory = [section, ...sectionHistory];
-    //         setSectionHistory(updatedHistory);
-    //         localStorage.setItem('sectionHistory', JSON.stringify(updatedHistory));
-    //     }
-
-    //     setLoading(true);
-    //     setError('');
-    //     if (section !== localStorage.getItem('selectedSection')) {
-    //         setRoutine(null);
-    //     }
-    //     if (routine && section && selectDay) {
-    //         localStorage.setItem('routineData', JSON.stringify(routine));
-    //         localStorage.setItem('selectedSection', section);
-    //         localStorage.setItem('selectedDay', selectDay);
-    //     }
-
-
-
-    //     try {
-    //         const response = await fetch(`https://diu.zahidp.xyz/api/routine?section=${section}`);
-    //         const result = await response.json();
-    //         // console.log("Data", result.data);
-
-    //         if (result.status !== 'Success' || !result.data) {
-    //             throw new Error('No routine found for this section');
-    //         }
-
-    //         setRoutine(result.data);
-    //         // console.log("Data", result.data);
-
-    //         const today = new Date().toLocaleString('en-US', { weekday: 'long' }).toUpperCase();
-    //         if (result.data[today]) {
-    //             setSelectDay(today);
-    //         } else {
-    //             const availableDay = Object.keys(result.data)[0];
-    //             setSelectDay(availableDay);
-    //         }
-    //     } catch (err) {
-    //         setError(err.message || 'Something went wrong');
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-
     // new fetch routine 
     const handleFetchRoutine = async () => {
         if (!section.trim()) {
@@ -238,20 +189,6 @@ const RoutineFetcher = () => {
     };
 
     const weekdays = ['SATURDAY', 'SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY'];
-
-    // const getTimeDifference = (start, end) => {
-    //     const [startH, startM] = start.split(':').map(Number);
-    //     const [endH, endM] = end.split(':').map(Number);
-
-    //     const startTotalMins = startH * 60 + startM;
-    //     const endTotalMins = endH * 60 + endM;
-
-    //     const diff = endTotalMins - startTotalMins;
-    //     const hours = Math.floor(diff / 60);
-    //     const mins = diff % 60;
-
-    //     return { hours, mins, total: diff };
-    // };
 
 
 

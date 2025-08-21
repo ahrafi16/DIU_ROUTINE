@@ -1,33 +1,77 @@
 import { useEffect, useState } from "react";
-import { FaRegCircleUser } from "react-icons/fa6";
 
 const daysOrder = ["SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"];
 
 const TeacherCard = ({ teacherInitial }) => {
     const [info, setInfo] = useState(null);
     const [error, setError] = useState('');
+    const [teacher, setTeacher] = useState(teacherInitial || '');
 
+    // restore searched teacher
     useEffect(() => {
-        const fetchInfo = async () => {
+        if (teacherInitial) {
+            setTeacher(teacherInitial);
+            localStorage.setItem('selectedTeacher', teacherInitial);
+        } else {
+            const saved = localStorage.getItem('selectedTeacher');
+            if (saved) setTeacher(saved);
+        }
+    }, [teacherInitial]);
+
+    // useEffect(() => {
+    //     const fetchInfo = async () => {
+    //         try {
+    //             const res = await fetch(`https://diu.zahidp.xyz/api/teacher-classes?teacher=${teacherInitial}`);
+    //             const data = await res.json();
+    //             if (data.status === 'success') {
+    //                 setInfo(data);
+    //                 // console.log("Fetched Data:", data);
+    //             } else {
+    //                 setError('No data found');
+    //             }
+    //         } catch (e) {
+    //             setError('Failed to fetch data', e);
+    //         }
+    //     };
+    //     if (teacherInitial) {
+    //         fetchInfo();
+    //     }
+    // }, [teacherInitial]);
+
+
+    // new effect
+    useEffect(() => {
+        if (!teacher) return;
+
+        const ctrl = new AbortController();
+
+        (async () => {
             try {
-                const res = await fetch(`https://diu.zahidp.xyz/api/teacher-classes?teacher=${teacherInitial}`);
+                setError('');
+                setInfo(null);
+                const res = await fetch(
+                    `https://diu.zahidp.xyz/api/teacher-classes?teacher=${teacher}`,
+                    { signal: ctrl.signal }
+                );
                 const data = await res.json();
-                if (data.status === 'success') {
+
+                if (data.status?.toLowerCase() === 'success') {
                     setInfo(data);
-                    // console.log("Fetched Data:", data);
                 } else {
                     setError('No data found');
                 }
             } catch (e) {
-                setError('Failed to fetch data', e);
+                if (e.name !== 'AbortError') setError('Failed to fetch data');
             }
-        };
-        if (teacherInitial) {
-            fetchInfo();
-        }
-    }, [teacherInitial]);
+        })();
 
-    if (!teacherInitial) return null;
+        return () => ctrl.abort();
+    }, [teacher]);
+
+    // if (!teacherInitial) return null;
+    if (!teacher) return null;
+
+
 
     return (
         <div className="mt-6 p-4 bg-gray-800 text-white rounded-xl shadow w-full md:max-w-5xl mx-auto">

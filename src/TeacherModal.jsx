@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { MdOutlineCancel } from "react-icons/md";
+import { MdOutlineCancel, MdOutlineContentCopy } from "react-icons/md";
+import { LuSwitchCamera } from "react-icons/lu";
 import TeacherCard from './teacherCard';
+import TeacherRoutine from './TeacherRoutine';
 const TeacherModal = ({ teacherInitial, onClose }) => {
     const [info, setInfo] = useState(null);
     const [error, setError] = useState('');
     const modalRef = useRef();
+    const [copied, setCopied] = useState("");
 
     // Close on outside click
     useEffect(() => {
@@ -22,6 +25,18 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
         document.body.style.overflow = 'hidden';
         return () => { document.body.style.overflow = 'auto'; };
     }, []);
+
+    // copy to clip board
+    const copyToClipboard = (text, type) => {
+        if (!text) return;
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                setCopied(type); // e.g., "email" or "phone"
+                setTimeout(() => setCopied(""), 2000); // hide after 2 seconds
+            })
+            .catch((err) => console.error("Failed to copy:", err));
+    };
+
 
     useEffect(() => {
         const fetchInfo = async () => {
@@ -61,8 +76,22 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
                                 <div>
                                     <h2 className="text-xl font-bold mb-2">{info.teacher_info.name}</h2>
                                     <p><strong>Designation:</strong> {info.teacher_info.designation}</p>
-                                    <p><strong>Email:</strong> {info.teacher_info.email}</p>
-                                    <p><strong>Phone:</strong> {info.teacher_info.cell_phone}</p>
+                                    <p className='flex items-center gap-1'><strong>Email:</strong> {info.teacher_info.email} <MdOutlineContentCopy className='text-green-300 hover:text-green-50'
+                                        onClick={() => copyToClipboard(info.teacher_info.email, "email")} />
+                                        {copied === "email" && (
+                                            <span className="absolute bottom-1 right-1 ml-2 bg-black text-white text-xs px-2 py-1 rounded">
+                                                Copied!
+                                            </span>
+                                        )}
+                                    </p>
+                                    <p className='flex items-center gap-1'><strong>Phone:</strong> {info.teacher_info.cell_phone} <MdOutlineContentCopy className='text-green-300 hover:text-green-50'
+                                        onClick={() => copyToClipboard(info.teacher_info.cell_phone, "phone")} />
+                                        {copied === "phone" && (
+                                            <span className="absolute bottom-1 right-1 ml-2 bg-black text-white text-xs px-2 py-1 rounded">
+                                                Copied!
+                                            </span>
+                                        )}
+                                    </p>
                                 </div>
 
                             </>
@@ -70,23 +99,6 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
                             <p className="text-gray-300">No teacher info available.</p>
                         )}
 
-                        {/* <h3 className="mt-4 text-lg font-semibold">🗓️ Classes</h3> */}
-                        {/* {Object.keys(info.data).map((day) => (
-                            <div key={day} className="mt-2">
-                                <strong>{day}</strong>
-                                <ul className="list-disc list-inside text-sm text-white">
-                                    {Array.isArray(info.data[day]) && info.data[day].length > 0 ? (
-                                        info.data[day].map((cls, idx) => (
-                                            <li key={idx}>
-                                                {cls.course_code} – {cls.course_title} | {cls.start_time} - {cls.end_time} | 📍 {cls.room} | Section: {cls.section}
-                                            </li>
-                                        ))
-                                    ) : (
-                                        <li className="text-gray-500">No classes</li>
-                                    )}
-                                </ul>
-                            </div>
-                        ))} */}
                     </div>
                 ) : (
                     <p>Loading...</p>
@@ -100,6 +112,7 @@ const TeacherSearch = () => {
     const [allInitials, setAllInitials] = useState([]);
     const [teacher, setTeacher] = useState('');
     const [selectedTeacher, setSelectedTeacher] = useState(null);
+    const [viewMode, setViewMode] = useState("routine");
 
     useEffect(() => {
         const fetchInitials = async () => {
@@ -117,6 +130,15 @@ const TeacherSearch = () => {
         fetchInitials();
     }, []);
 
+    // Restore last searched teacher from localStorage
+    useEffect(() => {
+        const savedTeacher = localStorage.getItem('selectedTeacher');
+        if (savedTeacher) {
+            setSelectedTeacher(savedTeacher);
+        }
+    }, []);
+
+
     const filteredSuggestions = teacher.length >= 1
         ? allInitials.filter((initial) =>
             initial.toLowerCase().startsWith(teacher.toLowerCase())
@@ -132,7 +154,9 @@ const TeacherSearch = () => {
                     e.preventDefault();
                     if (teacher.trim() !== '') {
                         setSelectedTeacher(teacher);
+                        localStorage.setItem('selectedTeacher', teacher);
                         setTeacher('');
+                        setViewMode("routine");
                     }
                 }}
                 className="flex w-full mx-auto md:w-2/3 justify-center gap-2 mb-4"
@@ -151,6 +175,13 @@ const TeacherSearch = () => {
                             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer transition"
                         >
                             Search
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setViewMode(prev => prev === "routine" ? "card" : "routine")}
+                            className="p-3 flex flex-col items-center justify-between bg-green-600 text-white rounded hover:bg-green-700 cursor-pointer transition text-xs"
+                        >
+                            <LuSwitchCamera className='text-lg' />
                         </button>
                     </div>
 
@@ -178,11 +209,9 @@ const TeacherSearch = () => {
             </form>
 
             {selectedTeacher && (
-                // <TeacherModal
-                //     teacherInitial={selectedTeacher}
-                //     onClose={() => setSelectedTeacher(null)}
-                // />
-                <TeacherCard teacherInitial={selectedTeacher} />
+                viewMode === "routine"
+                    ? <TeacherRoutine teacherInitial={selectedTeacher} />
+                    : <TeacherCard teacherInitial={selectedTeacher} />
             )}
         </div>
     );
