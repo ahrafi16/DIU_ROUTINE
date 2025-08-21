@@ -4,6 +4,14 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { FaRegCalendarCheck } from "react-icons/fa6";
 import relaxLottie from '../src/assets/Meditation.json';
 import Lottie from 'lottie-react';
+import { IoMdDownload } from "react-icons/io";
+
+
+// for pdf download
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+
 
 const RoutineFetcher = () => {
     const [section, setSection] = useState('');
@@ -26,21 +34,6 @@ const RoutineFetcher = () => {
         }
     }, [routine, section]);
 
-    // useEffect(() => {
-    //     const savedRoutine = localStorage.getItem('routineData');
-    //     const savedSection = localStorage.getItem('selectedSection');
-    //     const savedDay = localStorage.getItem('selectedDay');
-
-    //     if (savedRoutine && savedSection) {
-    //         setRoutine(JSON.parse(savedRoutine));
-    //         setSection(savedSection);
-    //         if (savedDay) {
-    //             setSelectDay(savedDay);
-    //         }
-    //     }
-    // }, []);
-
-    // new useEffect
     useEffect(() => {
         const savedRoutine = localStorage.getItem('routineData');
         const savedSection = localStorage.getItem('selectedSection');
@@ -158,7 +151,10 @@ const RoutineFetcher = () => {
 
     // new fetch routine 
     const handleFetchRoutine = async () => {
-        if (!section.trim()) return;
+        if (!section.trim()) {
+            alert("Please enter a section first!");
+            return;
+        }
 
         if (!sectionHistory.includes(section)) {
             const updatedHistory = [section, ...sectionHistory];
@@ -257,6 +253,63 @@ const RoutineFetcher = () => {
     //     return { hours, mins, total: diff };
     // };
 
+
+
+    // download routine pdf
+    const handleDownloadPDF = () => {
+        if (!section.trim()) {
+            alert("Please enter a section first!");
+            return;
+        }
+        if (!routine) {
+            alert("No routine to download!");
+            return;
+        }
+
+        const doc = new jsPDF();
+        doc.setFontSize(16);
+        doc.text("Full Class Routine", 14, 20);
+
+        const tableData = [];
+
+        Object.keys(routine).forEach((day) => {
+            const dayData = routine[day];
+
+            if (Array.isArray(dayData) && dayData.length > 0) {
+                dayData.forEach((cls, index) => {
+                    tableData.push([
+                        index === 0 ? day : "", // Merge day cell
+                        `${cls.start_time} - ${cls.end_time}`,
+                        cls.course_title,
+                        cls.course_code,
+                        cls.room,
+                        cls.teacher,
+                        cls.section,
+                    ]);
+                });
+            } else {
+                tableData.push([day, "No classes", "-", "-", "-", "-", "-"]);
+            }
+        });
+
+        autoTable(doc, {
+            startY: 30,
+            head: [["Day", "Time", "Course Title", "Code", "Room", "Teacher", "Section"]],
+            body: tableData,
+            theme: "grid",
+            styles: { fontSize: 10, cellPadding: 2 },
+            headStyles: { fillColor: [41, 48, 61] },
+        });
+
+        doc.save("routine.pdf");
+    };
+
+
+
+
+
+
+
     return (
         <div className="mx-auto bg-[#29303d] text-white p-6 mt-2 rounded shadow">
             <h1 className="text-2xl flex justify-center gap-2 items-center font-semibold mb-7 text-center"><FaRegCalendarCheck /> View Class Routine</h1>
@@ -282,7 +335,15 @@ const RoutineFetcher = () => {
                         >
                             Search
                         </button>
+                        {/* download button */}
+                        <button
+                            onClick={handleDownloadPDF}
+                            className="px-2 py-1 flex flex-col items-center justify-between bg-green-600 text-white rounded hover:bg-green-700 cursor-pointer transition text-xs"
+                        >
+                            <IoMdDownload className='text-lg' />PDF
+                        </button>
                     </div>
+
                     {filteredSuggestions.length > 0 && (
                         <ul className="md:absolute z-10 bg-black/50 w-1/2 mt-1 border border-gray-300 rounded shadow max-h-60 overflow-y-auto">
                             {filteredSuggestions.map((sec, index) => (
