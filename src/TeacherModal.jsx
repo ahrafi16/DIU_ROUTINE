@@ -63,7 +63,7 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
                 {error ? (
                     <p className="text-red-500">{error}</p>
                 ) : info ? (
-                    <div className='bg-gray-700 text-white flex items-center gap-3 md:gap-5'>
+                    <div className='bg-gray-700 text-white flex items-center gap-1 md:gap-5'>
                         {info.teacher_info ? (
                             <>
                                 {info.teacher_info.image_url && (
@@ -73,10 +73,10 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
                                         className="w-32 h-32 object-cover mt-3 rounded-full border"
                                     />
                                 )}
-                                <div>
+                                <div className=''>
                                     <h2 className="text-xl font-bold mb-2">{info.teacher_info.name}</h2>
                                     <p><strong>Designation:</strong> {info.teacher_info.designation}</p>
-                                    <p className='flex items-center gap-1'><strong>Email:</strong> {info.teacher_info.email} <MdOutlineContentCopy className='text-green-300 hover:text-green-50'
+                                    <p className='flex items-center gap-1'><strong>Email:</strong>{info.teacher_info.email} <MdOutlineContentCopy className='text-green-300 hover:text-green-50'
                                         onClick={() => copyToClipboard(info.teacher_info.email, "email")} />
                                         {copied === "email" && (
                                             <span className="absolute bottom-1 right-1 ml-2 bg-black text-white text-xs px-2 py-1 rounded">

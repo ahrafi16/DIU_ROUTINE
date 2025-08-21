@@ -13,6 +13,7 @@ const TeacherRoutine = ({ teacherInitial }) => {
   const [error, setError] = useState("");
   const [selectDay, setSelectDay] = useState("");
   const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [tname, setTname] = useState('');
 
   useEffect(() => {
     if (teacherInitial) setTeacher(teacherInitial);
@@ -34,6 +35,7 @@ const TeacherRoutine = ({ teacherInitial }) => {
           { signal: ctrl.signal }
         );
         const data = await res.json();
+        setTname(data.teacher_info.name);
 
         if (data.status?.toLowerCase() === "success") {
           setRoutine(data.data);
@@ -88,7 +90,7 @@ const TeacherRoutine = ({ teacherInitial }) => {
   return (
     <div className="mx-auto bg-[#29303d] text-white p-6 mt-2 rounded shadow">
       <h1 className="text-2xl flex justify-center gap-2 items-center font-semibold mb-7 text-center">
-        📅 Routine of {teacher}
+        📅 Routine of {tname}
       </h1>
 
       {loading && <p className="text-center text-lg">Loading...</p>}
@@ -104,11 +106,10 @@ const TeacherRoutine = ({ teacherInitial }) => {
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.05 }}
                 onClick={() => setSelectDay(day)}
-                className={`px-1 w-full md:px-1 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200 ${
-                  selectDay === day
-                    ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
-                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                }`}
+                className={`px-1 w-full md:px-1 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200 ${selectDay === day
+                  ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  }`}
               >
                 <span className="block md:hidden">{day.substring(0, 3)}</span>
                 <span className="hidden md:block">{day}</span>
@@ -148,8 +149,8 @@ const TeacherRoutine = ({ teacherInitial }) => {
                             <span className="flex text-sm md:text-md flex-col">
                               <span>{formatTime(cls.start_time)}</span>
                               <span className="my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl"></span>
-                              <span className="my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl"></span>
-                              <span className="my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl"></span>
+                              {/* <span className="my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl"></span>
+                              <span className="my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl"></span> */}
                               <span className="my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl"></span>
                               <span className="my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl"></span>
                               <span className="my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl"></span>
