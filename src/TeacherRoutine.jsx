@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Lottie from "lottie-react";
 import relaxLottie from "../src/assets/Meditation.json"; // your existing lottie animation
 import { TeacherModal } from "./TeacherModal";
+import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 
 const weekdays = ["SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"];
 
@@ -88,9 +89,9 @@ const TeacherRoutine = ({ teacherInitial }) => {
   if (!teacher) return null;
 
   return (
-    <div className="mx-auto bg-[#29303d] text-white p-6 mt-2 rounded shadow">
+    <div className="mx-auto bg-[#29303d] text-white mt-2 rounded shadow">
       <h1 className="text-2xl flex justify-center gap-2 items-center font-semibold mb-7 text-center">
-        📅 Routine of {tname}
+        <LiaChalkboardTeacherSolid /> Routine of {tname}
       </h1>
 
       {loading && <p className="text-center text-lg">Loading...</p>}

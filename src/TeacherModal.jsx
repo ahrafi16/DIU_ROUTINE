@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { MdOutlineCancel, MdOutlineContentCopy } from "react-icons/md";
-import { LuSwitchCamera } from "react-icons/lu";
+import { FaArrowsRotate } from "react-icons/fa6";
+import { FaSearch } from "react-icons/fa";
 import TeacherCard from './teacherCard';
 import TeacherRoutine from './TeacherRoutine';
 const TeacherModal = ({ teacherInitial, onClose }) => {
@@ -148,7 +149,7 @@ const TeacherSearch = () => {
 
     return (
         <div className="mx-auto bg-[#29303d]  p-6 mt-2 rounded shadow">
-            <h2 className="text-2xl flex justify-center font-bold mb-7">🔍 Search Teacher by Initial</h2>
+            <h2 className="text-2xl flex justify-center items-center gap-1 font-bold mb-7"><FaSearch /> Search Teacher by Initial</h2>
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
@@ -172,16 +173,16 @@ const TeacherSearch = () => {
                         />
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer transition"
+                            className="px-4 py-2 bg-gradient-to-r from-[#124170] to-[#26667F] rounded hover:bg-gradient-to-r hover:from-[#26667F] hover:to-[#124170] cursor-pointer transition"
                         >
                             Search
                         </button>
                         <button
                             type="button"
                             onClick={() => setViewMode(prev => prev === "routine" ? "card" : "routine")}
-                            className="p-3 flex flex-col items-center justify-between bg-green-600 text-white rounded hover:bg-green-700 cursor-pointer transition text-xs"
+                            className="p-3 flex flex-col items-center justify-between bg-[#26667F] text-white rounded hover:bg-[#124170] cursor-pointer transition text-xs"
                         >
-                            <LuSwitchCamera className='text-lg' />
+                            <FaArrowsRotate className='text-lg' />
                         </button>
                     </div>
 

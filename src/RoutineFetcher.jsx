@@ -268,14 +268,14 @@ const RoutineFetcher = () => {
                         />
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer transition"
+                            className="px-4 py-2 rounded bg-gradient-to-r from-[#124170] to-[#26667F] cursor-pointer transition hover:bg-gradient-to-r hover:from-[#26667F] hover:to-[#124170] "
                         >
                             Search
                         </button>
                         {/* download button */}
                         <button
                             onClick={handleDownloadPDF}
-                            className="px-2 py-1 flex flex-col items-center justify-between bg-green-600 text-white rounded hover:bg-green-700 cursor-pointer transition text-xs"
+                            className="px-2 py-1 flex flex-col items-center justify-between bg-[#26667F] text-white rounded hover:bg-[#124170] cursor-pointer transition text-xs"
                         >
                             <IoMdDownload className='text-lg' />PDF
                         </button>
