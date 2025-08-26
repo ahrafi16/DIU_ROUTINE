@@ -90,8 +90,8 @@ const TeacherRoutine = ({ teacherInitial }) => {
 
   return (
     <div className="mx-auto bg-[#29303d] text-white mt-2 rounded shadow">
-      <h1 className="text-2xl flex justify-center gap-2 items-center font-semibold mb-7 text-center">
-        <LiaChalkboardTeacherSolid /> Routine of {tname}
+      <h1 className="text-2xl flex justify-center md:gap-1 md:items-center font-semibold mb-7 text-center">
+        <LiaChalkboardTeacherSolid className="text-4xl" /> Routine of {tname}
       </h1>
 
       {loading && <p className="text-center text-lg">Loading...</p>}
