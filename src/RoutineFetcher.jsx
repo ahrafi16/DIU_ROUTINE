@@ -45,12 +45,19 @@ const RoutineFetcher = () => {
 
             // Set selectDay to today if available, otherwise first available day
             const today = new Date().toLocaleString('en-US', { weekday: 'long' }).toUpperCase();
-            if (parsedRoutine[today]) {
+            // if (parsedRoutine[today]) {
+            //     setSelectDay(today);
+            // } else {
+            //     const availableDay = Object.keys(parsedRoutine)[0];
+            //     setSelectDay(availableDay || '');
+            // }
+            if (today in parsedRoutine) {
                 setSelectDay(today);
             } else {
                 const availableDay = Object.keys(parsedRoutine)[0];
                 setSelectDay(availableDay || '');
             }
+
         }
     }, []);
     // new useEffect
@@ -135,12 +142,20 @@ const RoutineFetcher = () => {
             setRoutine(result.data);
 
             const today = new Date().toLocaleString('en-US', { weekday: 'long' }).toUpperCase();
-            if (result.data[today]) {
+
+            // if (result.data[today]) {
+            //     setSelectDay(today);
+            // } else {
+            //     const availableDay = Object.keys(result.data)[0];
+            //     setSelectDay(availableDay);
+            // }
+            if (today in result.data) {
                 setSelectDay(today);
             } else {
                 const availableDay = Object.keys(result.data)[0];
                 setSelectDay(availableDay);
             }
+
         } catch (err) {
             setError(err.message || 'Something went wrong');
         } finally {
@@ -172,7 +187,7 @@ const RoutineFetcher = () => {
 
         return nextDate.toLocaleDateString('en-US', {
             day: '2-digit',
-            month: 'long',
+            month: 'short',
             // year: 'numeric',
         });
     };
@@ -327,7 +342,7 @@ const RoutineFetcher = () => {
                                 onClick={() => setSelectDay(day)}
                                 className={`px-1 w-full md:px-1 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
                 ${selectDay === day
-                                        ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'
+                                        ? 'bg-gradient-to-r from-[#124170] to-[#26667F]'
                                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
                             >
                                 {/* Show abbreviated on mobile, full on desktop */}

@@ -58,7 +58,7 @@ const EmptyRoom = () => {
         today.setDate(today.getDate() + diff);
         return today.toLocaleDateString("en-US", {
             day: "2-digit",
-            month: "long",
+            month: "short",
             // year: "numeric",
         });
     };
@@ -203,7 +203,7 @@ const EmptyRoom = () => {
                             onClick={() => setSelectedDay(day)}
                             className={`px-2 w-full md:px-1 py-2 rounded-md cursor-pointer text-xs md:text-sm font-semibold transition-all duration-200
                 ${selectedDay === day
-                                    ? 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'
+                                    ? 'bg-gradient-to-r from-[#124170] to-[#26667F]'
                                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
                         >
                             {/* Show abbreviated on mobile, full on desktop */}
