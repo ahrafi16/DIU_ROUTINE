@@ -121,7 +121,8 @@ const TeacherSearch = () => {
                 const res = await fetch('https://diu.zahidp.xyz/api/teachers');
                 const data = await res.json();
                 if (data.status === 'success') {
-                    setAllInitials(data.data.map(t => t.teacher));
+                    // setAllInitials(data.data.map(t => t.teacher));
+                    setAllInitials(data.data);
                     // console.log("Data", data.data);
                 }
             } catch (error) {
@@ -140,11 +141,18 @@ const TeacherSearch = () => {
     }, []);
 
 
+    // const filteredSuggestions = teacher.length >= 1
+    //     ? allInitials.filter((initial) =>
+    //         initial.toLowerCase().startsWith(teacher.toLowerCase())
+    //     )
+    //     : [];
     const filteredSuggestions = teacher.length >= 1
-        ? allInitials.filter((initial) =>
-            initial.toLowerCase().startsWith(teacher.toLowerCase())
+        ? allInitials.filter((t) =>
+            t.teacher.toLowerCase().startsWith(teacher.toLowerCase()) ||
+            t.name.toLowerCase().includes(teacher.toLowerCase())
         )
         : [];
+
 
 
     return (
@@ -187,19 +195,35 @@ const TeacherSearch = () => {
                     </div>
 
                     {filteredSuggestions.length > 0 && (
-                        <ul className="md:absolute z-10 bg-black/50 w-1/2 mt-1 border border-gray-300 rounded shadow max-h-60 overflow-y-auto">
-                            {filteredSuggestions.map((initial, index) => (
+                        // <ul className="md:absolute z-10 bg-black/50 w-1/2 mt-1 border border-gray-300 rounded shadow max-h-60 overflow-y-auto">
+                        //     {filteredSuggestions.map((initial, index) => (
+                        //         <li
+                        //             key={index}
+                        //             onClick={() => {
+                        //                 setTeacher(initial);
+                        //             }}
+                        //             className="px-4 py-2 hover:bg-gray-500 cursor-pointer"
+                        //         >
+                        //             {initial}
+                        //         </li>
+                        //     ))}
+                        // </ul>
+
+                        <ul className="md:absolute z-10 bg-black/90 w-1/2 mt-1 border border-gray-300 rounded shadow max-h-60 overflow-y-auto">
+                            {filteredSuggestions.map((t, index) => (
                                 <li
                                     key={index}
                                     onClick={() => {
-                                        setTeacher(initial);
+                                        setTeacher(t.teacher); // pick the initial on click
                                     }}
-                                    className="px-4 py-2 hover:bg-gray-500 cursor-pointer"
+                                    className="px-4 py-2 hover:bg-gray-500 cursor-pointer flex flex-col"
                                 >
-                                    {initial}
+                                    <span className="font-bold">{t.teacher}</span>
+                                    <span className="text-sm">{t.name}</span>
                                 </li>
                             ))}
                         </ul>
+
                     )}
 
 
