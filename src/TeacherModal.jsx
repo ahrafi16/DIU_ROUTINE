@@ -58,20 +58,20 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
 
     return (
         <div className="fixed m-1 inset-0 backdrop-blur-sm bg-black/30 flex justify-center items-center z-50">
-            <div ref={modalRef} className="bg-gray-700 p-4 md:p-6 rounded-lg shadow-xl w-full max-w-xl relative">
-                <button className="absolute top-2 right-2 text-red-400" onClick={onClose}><MdOutlineCancel className='text-2xl' /></button>
+            <div ref={modalRef} className="bg-gray-700 p-2 md:p-6 rounded-lg shadow-xl w-full max-w-lg relative">
+                <button className="absolute top-2 right-2 text-red-400 hover:text-red-500" onClick={onClose}><MdOutlineCancel className='text-2xl' /></button>
 
                 {error ? (
                     <p className="text-red-500">{error}</p>
                 ) : info ? (
-                    <div className='bg-gray-700 text-white flex items-center gap-1 md:gap-5'>
+                    <div className='bg-gray-700 text-white flex items-center gap-2 md:gap-5'>
                         {info.teacher_info ? (
                             <>
                                 {info.teacher_info.image_url && (
                                     <img
                                         src={info.teacher_info.image_url}
                                         alt={info.teacher_info.name}
-                                        className="w-32 h-32 object-cover mt-3 rounded-full border"
+                                        className="w-24 md:w-32 h-24 md:h-32 object-cover md:mt-3 rounded-full border"
                                     />
                                 )}
                                 <div className=''>
