@@ -58,7 +58,7 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
 
     return (
         <div className="fixed m-1 inset-0 backdrop-blur-sm bg-black/30 flex justify-center items-center z-50">
-            <div ref={modalRef} className="bg-gray-700 p-2 md:p-6 rounded-lg shadow-xl w-full max-w-lg relative">
+            <div ref={modalRef} className="bg-gray-700 m-2 p-2 md:p-6 rounded-lg shadow-xl w-full max-w-lg relative">
                 <button className="absolute top-2 right-2 text-red-400 hover:text-red-500" onClick={onClose}><MdOutlineCancel className='text-2xl' /></button>
 
                 {error ? (
@@ -77,15 +77,17 @@ const TeacherModal = ({ teacherInitial, onClose }) => {
                                 <div className=''>
                                     <h2 className="text-xl font-bold mb-2">{info.teacher_info.name}</h2>
                                     <p><strong>Designation:</strong> {info.teacher_info.designation}</p>
-                                    <p className='flex items-center gap-1'><strong>Email:</strong>{info.teacher_info.email} <MdOutlineContentCopy className='text-green-300 hover:text-green-50'
-                                        onClick={() => copyToClipboard(info.teacher_info.email, "email")} />
+                                    <p className='flex items-center gap-2'><strong>Email:</strong>{info.teacher_info.email.length > 23
+                                        ? `${info.teacher_info.email.substring(0, 20)}...`
+                                        : info.teacher_info.email} <MdOutlineContentCopy className='text-green-300 hover:text-green-50'
+                                            onClick={() => copyToClipboard(info.teacher_info.email, "email")} />
                                         {copied === "email" && (
                                             <span className="absolute bottom-1 right-1 ml-2 bg-black text-white text-xs px-2 py-1 rounded">
                                                 Copied!
                                             </span>
                                         )}
                                     </p>
-                                    <p className='flex items-center gap-1'><strong>Phone:</strong> {info.teacher_info.cell_phone} <MdOutlineContentCopy className='text-green-300 hover:text-green-50'
+                                    <p className='flex items-center gap-2'><strong>Phone:</strong> {info.teacher_info.cell_phone} <MdOutlineContentCopy className='text-green-300 hover:text-green-50'
                                         onClick={() => copyToClipboard(info.teacher_info.cell_phone, "phone")} />
                                         {copied === "phone" && (
                                             <span className="absolute bottom-1 right-1 ml-2 bg-black text-white text-xs px-2 py-1 rounded">
