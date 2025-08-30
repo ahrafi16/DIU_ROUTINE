@@ -148,7 +148,7 @@ const EmptyRoom = () => {
                                         }}
                                         className="block px-4 py-2 text-sm hover:bg-gray-700 text-white"
                                     >
-                                        {time}
+                                        {time}  {selectedTime === time ? "✓" : ""}
                                     </a>
                                 ))}
                             </div>
