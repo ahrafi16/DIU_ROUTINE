@@ -207,8 +207,8 @@ const EmptyRoom = () => {
                                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
                         >
                             {/* Show abbreviated on mobile, full on desktop */}
-                            <span className="block md:hidden">{day.substring(0, 3)}</span>
-                            <span className="hidden md:block">{day}</span>
+                            <span className="block lg:hidden">{day.substring(0, 3)}</span>
+                            <span className="hidden lg:block">{day}</span>
                             <br />
                             <span className="text-xs font-normal">{getNextDateForDay(day)}</span>
                         </motion.button>
