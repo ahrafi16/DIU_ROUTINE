@@ -20,7 +20,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#1a1c23] text-white mx-auto md:px-70">
+    <div className="min-h-screen flex flex-col bg-[#1a1c23] text-white mx-auto md:px-20 lg:px-70">
       {/* Topbar (Desktop only) */}
       <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-2 p-4 bg-[#124170]">
         <div className="flex items-center space-x-3">
