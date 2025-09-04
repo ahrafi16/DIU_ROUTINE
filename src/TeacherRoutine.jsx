@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Lottie from "lottie-react";
 import relaxLottie from "../src/assets/Meditation.json"; // your existing lottie animation
+import loadingLottie from "../src/assets/loading.json"; // your existing lottie animation
 import { TeacherModal } from "./TeacherModal";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 import { PiChalkboardTeacherLight } from "react-icons/pi";
@@ -95,7 +96,16 @@ const TeacherRoutine = ({ teacherInitial }) => {
         <PiChalkboardTeacherLight className="text-4xl" /> Routine of {tname}
       </h1>
 
-      {loading && <p className="text-center text-lg">Loading...</p>}
+      {/* {loading && <p className="text-center text-lg">Loading...</p>} */}
+      {loading &&
+        <div className='flex flex-col items-center justify-center mt-6'>
+          <Lottie
+            animationData={loadingLottie}
+            loop={true}
+            autoplay={Infinity} // Play when a day is selected
+            style={{ width: 200, height: 200 }} // Adjust size as needed
+          />
+        </div>}
       {error && <p className="text-red-500 text-center">{error}</p>}
 
       {routine && (
