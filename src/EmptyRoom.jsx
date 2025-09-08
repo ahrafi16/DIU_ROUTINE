@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RiArrowDropDownLine } from "react-icons/ri";
 
 const timeOptions = ["08:30", "10:00", "11:30", "01:00", "02:30", "04:00"];
 const weekdays = ["SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY"];
@@ -12,7 +11,7 @@ const EmptyRoom = () => {
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
-    const fetchEmptyRooms = (time) => {
+    const fetchEmptyRooms = (time, preserveSelectedDay = false) => {
         setLoading(true);
         fetch(`https://diu.zahidp.xyz/api/empty-rooms?start_time=${time}`)
             .then((res) => res.json())
@@ -20,13 +19,25 @@ const EmptyRoom = () => {
                 const roomsData = data?.data || {};
                 setEmptyRooms(roomsData);
 
-                // Default to today or first available day
-                const today = new Date().toLocaleString('en-US', { weekday: 'long' }).toUpperCase();
-                if (roomsData[today]) {
-                    setSelectedDay(today);
+                // Only set default day if we don't have a selected day or if preserveSelectedDay is false
+                if (!preserveSelectedDay || !selectedDay) {
+                    const today = new Date().toLocaleString('en-US', { weekday: 'long' }).toUpperCase();
+                    if (roomsData[today]) {
+                        setSelectedDay(today);
+                    } else {
+                        const firstAvailable = Object.keys(roomsData)[0];
+                        setSelectedDay(firstAvailable);
+                    }
                 } else {
-                    const firstAvailable = Object.keys(roomsData)[0];
-                    setSelectedDay(firstAvailable);
+                    // If preserveSelectedDay is true and we have a selectedDay, 
+                    // check if it still exists in the new data
+                    if (!roomsData[selectedDay]) {
+                        // If the previously selected day is not available in new data,
+                        // fall back to the first available day
+                        const firstAvailable = Object.keys(roomsData)[0];
+                        setSelectedDay(firstAvailable);
+                    }
+                    // Otherwise, keep the current selectedDay
                 }
 
                 setLoading(false);
@@ -37,9 +48,18 @@ const EmptyRoom = () => {
             });
     };
 
+    // Initial load
     useEffect(() => {
         fetchEmptyRooms(selectedTime);
-    }, [selectedTime]);
+    }, []); // Only run on initial mount
+
+    // Handle time change
+    const handleTimeChange = (newTime) => {
+        setSelectedTime(newTime);
+        setIsOpen(false);
+        // Preserve the selected day when time changes
+        fetchEmptyRooms(newTime, true);
+    };
 
     const getNextDateForDay = (dayName) => {
         const dayMap = {
@@ -59,7 +79,6 @@ const EmptyRoom = () => {
         return today.toLocaleDateString("en-US", {
             day: "2-digit",
             month: "short",
-            // year: "numeric",
         });
     };
 
@@ -70,41 +89,6 @@ const EmptyRoom = () => {
             {/* Time Selection */}
             <div className="mb-6 flex gap-3 items-center">
                 <label className="font-semibold">Select Time :</label>
-                {/* <div className="relative inline-block w-26">
-                    <select
-                        className="appearance-none w-full border border-gray-500 text-red-50 font-bold rounded p-2 "
-                        value={selectedTime}
-                        onChange={(e) => setSelectedTime(e.target.value)}
-                    >
-                        {timeOptions.map((time) => (
-                            <option className="bg-stone-700" key={time} value={time}>
-                                {time}
-                            </option>
-                        ))}
-                    </select>
-
-                    <div className="pointer-events-none absolute inset-y-0 right-1 flex items-center text-white">
-                        <RiArrowDropDownLine className="text-2xl" />
-                    </div>
-                </div> */}
-
-                {/* New dropdown */}
-                {/* <div class="relative inline-block">
-                    <button id="menu-button" type="button" aria-expanded="true" aria-haspopup="true" class="inline-flex w-full justify-center gap-x-1.5 rounded-md  px-3 py-2 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inse">
-                        Options
-                        <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
-                            <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
-                        </svg>
-                    </button>
-
-                    <div role="menu" tabindex="-1" aria-labelledby="menu-button" aria-orientation="vertical" class="absolute right-0 z-10 mt-2 w-24 origin-top-right rounded-md bg-black/90 shadow-lg ring-1 ring-black/5 focus:outline-hidden">
-                        <div role="none" class="py-1">
-                            {timeOptions.map((time) => (
-                                <a id="menu-item-0" key={time} role="menuitem" href="#" tabindex="-1" class="block px-4 py-2 text-sm hover:bg-red-400 text-white">{time}</a>
-                            ))}
-                        </div>
-                    </div>
-                </div> */}
                 <div className="relative inline-block w-24">
                     <button
                         id="menu-button"
@@ -143,53 +127,29 @@ const EmptyRoom = () => {
                                         tabIndex="-1"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            setSelectedTime(time);
-                                            setIsOpen(false);
+                                            handleTimeChange(time);
                                         }}
                                         className="block px-4 py-2 text-sm hover:bg-gray-700 text-white"
                                     >
-                                        {time}  {selectedTime === time ? "✓" : ""}
+                                        {time} &nbsp;&nbsp; {selectedTime === time ? "✓" : ""}
                                     </a>
                                 ))}
                             </div>
                         </div>
                     )}
                 </div>
-
-                {/* New dropdown */}
-
             </div>
 
             {/* Loading Spinner */}
             {loading && (
-                // <p className="text-center text-lg">Loading...</p>
                 <div className="px-2 w-full flex justify-between gap-1 md:gap-2 md:px-4 py-2 rounded-md text-xs md:text-sm font-semibold animate-pulse">
-                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
-                        <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
-                    </div>
-                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
-                        <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
-                    </div>
-                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
-                        <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
-                    </div>
-                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
-                        <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
-                    </div>
-                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
-                        <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
-                    </div>
-                    <div className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
-                        <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
-                        <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
-                    </div>
+                    {weekdays.map((day, index) => (
+                        <div key={index} className="border border-gray-600 w-full md:w-fit px-2 py-2 rounded-md">
+                            <div className="h-4 w-6 md:w-20 bg-gray-600 rounded mb-1 mx-auto"></div>
+                            <div className="h-3 w-6 md:w-20 bg-gray-500 rounded mx-auto"></div>
+                        </div>
+                    ))}
                 </div>
-
             )}
 
             {/* Day Cards */}
