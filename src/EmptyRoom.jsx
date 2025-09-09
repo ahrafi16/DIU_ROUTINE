@@ -198,7 +198,7 @@ const EmptyRoom = () => {
                                         key={idx}
                                         className="bg-gray-800 text-white p-3 rounded-lg"
                                     >
-                                        🏠 {room.room}
+                                        🏠 {room.room ? room.room : "TBA"}
                                     </li>
                                 ))}
                             </ul>

@@ -432,15 +432,15 @@ const RoutineFetcher = () => {
                                                             <div className='flex text-sm md:text-md flex-col gap-1'>
                                                                 {/* <span><span>{formatTime(cls.start_time)} - {formatTime(cls.end_time)}</span>
                                                             </span> */}
-                                                                {cls.course_code}
-                                                                <span>  {cls.room}</span>
+                                                                {cls.course_code ? cls.course_code : "TBA"}
+                                                                <span>  {cls.room ? cls.room : "TBA"}</span>
                                                                 <span
                                                                     className="text-[#83aff0] cursor-pointer font-semibold"
                                                                     onClick={() => setSelectedTeacher(cls.teacher)}
                                                                 >
-                                                                    {cls.teacher}
+                                                                    {cls.teacher ? cls.teacher : "TBA"}
                                                                 </span>
-                                                                <span>{cls.section}</span>
+                                                                <span>{cls.section ? cls.section : "TBA"}</span>
                                                             </div>
 
                                                         </div>
