@@ -413,7 +413,7 @@ const RoutineFetcher = () => {
                                                     </div>
                                                     <div className="text-md text-white flex flex-col gap-2 md:gap-6">
                                                         <div className="font-semibold text-[#83aff0] text-sm md:text-lg">
-                                                            {cls.course_title}
+                                                            {cls.course_title ? cls.course_title : "TBA"}
                                                         </div>
                                                         <div className='flex gap-3'>
                                                             <div className='flex text-sm md:text-md flex-col text-gray-400 gap-1'>
