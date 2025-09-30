@@ -7,12 +7,9 @@ import loadingLottie from '../src/assets/loading.json';
 import Lottie from 'lottie-react';
 import { IoMdDownload } from "react-icons/io";
 
-
 // for pdf download
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-
-
 
 const RoutineFetcher = () => {
     const [section, setSection] = useState('');
@@ -44,24 +41,10 @@ const RoutineFetcher = () => {
             setRoutine(parsedRoutine);
             setSection(savedSection);
 
-            // Set selectDay to today if available, otherwise first available day
             const today = new Date().toLocaleString('en-US', { weekday: 'long' }).toUpperCase();
-            // if (parsedRoutine[today]) {
-            //     setSelectDay(today);
-            // } else {
-            //     const availableDay = Object.keys(parsedRoutine)[0];
-            //     setSelectDay(availableDay || '');
-            // }
-            if (today in parsedRoutine) {
-                setSelectDay(today);
-            } else {
-                const availableDay = Object.keys(parsedRoutine)[0];
-                setSelectDay(availableDay || '');
-            }
-
+            setSelectDay(today);
         }
     }, []);
-    // new useEffect
 
     useEffect(() => {
         if (selectDay) {
@@ -69,17 +52,13 @@ const RoutineFetcher = () => {
         }
     }, [selectDay]);
 
-
-
     useEffect(() => {
         const fetchSections = async () => {
             try {
                 const res = await fetch('https://diu.zahidp.xyz/api/sections');
                 const data = await res.json();
-                // console.log("Sections Data", data);
                 if (data.status?.toLowerCase() === 'success') {
                     setAllSections(data.data || []);
-                    // console.log('All sections:', data.data);
                 }
             } catch (err) {
                 console.error("Error fetching sections:", err);
@@ -87,7 +66,6 @@ const RoutineFetcher = () => {
         };
         fetchSections();
     }, []);
-
 
     const handleSectionChange = (e) => {
         const value = e.target.value.toString().toUpperCase();
@@ -97,18 +75,12 @@ const RoutineFetcher = () => {
             const matches = allSections.filter((sec) =>
                 sec.toUpperCase().startsWith(value)
             );
-            // console.log("Matching sections:", matches);
             setFilteredSuggestions(matches);
         } else {
             setFilteredSuggestions([]);
         }
-
-
     };
 
-
-
-    // new fetch routine 
     const handleFetchRoutine = async () => {
         if (!section.trim()) {
             alert("Please enter a section first!");
@@ -126,36 +98,19 @@ const RoutineFetcher = () => {
         if (section !== localStorage.getItem('selectedSection')) {
             setRoutine(null);
         }
-        if (routine && section && selectDay) {
-            localStorage.setItem('routineData', JSON.stringify(routine));
-            localStorage.setItem('selectedSection', section);
-            localStorage.setItem('selectedDay', selectDay);
-        }
 
         try {
             const response = await fetch(`https://diu.zahidp.xyz/api/routine?section=${section}`);
             const result = await response.json();
 
-            if (result.status !== 'Success' || !result.data) {
+            if (result.status?.toLowerCase() !== 'success' || !result.data) {
                 throw new Error('No routine found for this section');
             }
 
             setRoutine(result.data);
 
             const today = new Date().toLocaleString('en-US', { weekday: 'long' }).toUpperCase();
-
-            // if (result.data[today]) {
-            //     setSelectDay(today);
-            // } else {
-            //     const availableDay = Object.keys(result.data)[0];
-            //     setSelectDay(availableDay);
-            // }
-            if (today in result.data) {
-                setSelectDay(today);
-            } else {
-                const availableDay = Object.keys(result.data)[0];
-                setSelectDay(availableDay);
-            }
+            setSelectDay(today);
 
         } catch (err) {
             setError(err.message || 'Something went wrong');
@@ -163,7 +118,6 @@ const RoutineFetcher = () => {
             setLoading(false);
         }
     };
-    // new fetch routine 
 
     const getNextDateForDay = (dayName) => {
         const dayMap = {
@@ -189,24 +143,22 @@ const RoutineFetcher = () => {
         return nextDate.toLocaleDateString('en-US', {
             day: '2-digit',
             month: 'short',
-            // year: 'numeric',
         });
     };
 
     const formatTime = (timeStr) => {
-        const [hours, minutes] = timeStr.split(':');
+        if (!timeStr || typeof timeStr !== "string") return "";
+        const [hours, minutes] = timeStr.split(":");
         const date = new Date();
         date.setHours(parseInt(hours), parseInt(minutes));
         return date.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
+            hour: "2-digit",
+            minute: "2-digit",
             hour12: false,
         });
     };
 
     const weekdays = ['SATURDAY', 'SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY'];
-
-
 
     // download routine pdf
     const handleDownloadPDF = () => {
@@ -231,12 +183,12 @@ const RoutineFetcher = () => {
             if (Array.isArray(dayData) && dayData.length > 0) {
                 dayData.forEach((cls, index) => {
                     tableData.push([
-                        index === 0 ? day : "", // Merge day cell
-                        `${cls.start_time} - ${cls.end_time}`,
-                        cls.course_title,
-                        cls.course_code,
+                        index === 0 ? day : "",
+                        `${cls.startTime} - ${cls.endTime}`,
+                        cls.title,
+                        cls.code,
                         cls.room,
-                        cls.teacher,
+                        cls.teacher_info?.name || "TBA",
                         cls.section,
                     ]);
                 });
@@ -256,6 +208,7 @@ const RoutineFetcher = () => {
 
         doc.save("routine.pdf");
     };
+
 
 
 
@@ -399,7 +352,7 @@ const RoutineFetcher = () => {
                                                 <div className='flex items-center gap-5'>
                                                     <div>
                                                         <span className='flex text-sm md:text-md flex-col'>
-                                                            <span>{formatTime(cls.start_time)}</span>
+                                                            <span>{formatTime(cls.startTime)}</span>
                                                             <span className='my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
                                                             <span className='my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
                                                             <span className='my-1 md:my-1.5 h-0.5 bg-gray-500 rounded-2xl'></span>
@@ -408,12 +361,12 @@ const RoutineFetcher = () => {
                                                             <span className='my-1 md:my-1.5 w-4 h-0.5 bg-gray-500 rounded-2xl'></span>
                                                             <span className='my-1 md:my-1.5 mb-2 h-0.5 bg-gray-500 rounded-2xl'></span>
                                                             <span></span>
-                                                            <span>{formatTime(cls.end_time)}</span>
+                                                            <span>{formatTime(cls.endTime)}</span>
                                                         </span>
                                                     </div>
                                                     <div className="text-md text-white flex flex-col gap-2 md:gap-6">
                                                         <div className="font-semibold text-[#83aff0] text-sm md:text-lg">
-                                                            {cls.course_title ? cls.course_title : "TBA"}
+                                                            {cls.title ? cls.title : "TBA"}
                                                         </div>
                                                         <div className='flex gap-3'>
                                                             <div className='flex text-sm md:text-md flex-col text-gray-400 gap-1'>
@@ -432,13 +385,13 @@ const RoutineFetcher = () => {
                                                             <div className='flex text-sm md:text-md flex-col gap-1'>
                                                                 {/* <span><span>{formatTime(cls.start_time)} - {formatTime(cls.end_time)}</span>
                                                             </span> */}
-                                                                {cls.course_code ? cls.course_code : "TBA"}
+                                                                {cls.code ? cls.code : "TBA"}
                                                                 <span>  {cls.room ? cls.room : "TBA"}</span>
                                                                 <span
                                                                     className="text-[#83aff0] cursor-pointer font-semibold"
-                                                                    onClick={() => setSelectedTeacher(cls.teacher)}
+                                                                    onClick={() => setSelectedTeacher(cls.teacher_info.name)}
                                                                 >
-                                                                    {cls.teacher ? cls.teacher : "TBA"}
+                                                                    {cls.teacher_info ? cls.teacher_info.name : "TBA"}
                                                                 </span>
                                                                 <span>{cls.section ? cls.section : "TBA"}</span>
                                                             </div>

@@ -307,9 +307,9 @@ const TeacherSearch = () => {
     // Filter suggestions based on input
     const filteredSuggestions = teacher.length >= 1 && Array.isArray(allInitials)
         ? allInitials.filter((t) => {
-            if (!t || !t.teacher) return false;
+            if (!t || !t.initial) return false;
             return (
-                t.teacher.toLowerCase().startsWith(teacher.toLowerCase()) ||
+                t.initial.toLowerCase().startsWith(teacher.toLowerCase()) ||
                 (t.name && t.name.toLowerCase().includes(teacher.toLowerCase()))
             );
         }).slice(0, 10) // Limit to 10 suggestions
@@ -321,11 +321,20 @@ const TeacherSearch = () => {
         const trimmedTeacher = teacher.trim();
 
         if (trimmedTeacher !== '') {
-            setSelectedTeacher(trimmedTeacher);
-            saveToLocalStorage('selectedTeacher', trimmedTeacher);
-            setTeacher('');
-            setShowSuggestions(false);
-            setViewMode("routine");
+            const found = allInitials.find(t =>
+                t.initial.toUpperCase() === trimmedTeacher.toUpperCase() ||
+                (t.name && t.name.toLowerCase().includes(trimmedTeacher.toLowerCase()))
+            );
+
+            if (found) {
+                setSelectedTeacher(found.initial);
+                saveToLocalStorage('selectedTeacher', found.initial);
+                setTeacher('');
+                setShowSuggestions(false);
+                setViewMode("routine");
+            } else {
+                setError("Teacher not found!");
+            }
         }
     };
 
@@ -402,11 +411,11 @@ const TeacherSearch = () => {
                         <ul className="absolute z-10 bg-black/90 text-white w-full mt-1 border border-gray-300 rounded shadow max-h-60 overflow-y-auto">
                             {filteredSuggestions.map((t, index) => (
                                 <li
-                                    key={`${t.teacher}-${index}`}
-                                    onClick={() => handleSuggestionClick(t.teacher)}
+                                    key={`${t.initial}-${index}`}
+                                    onClick={() => handleSuggestionClick(t.initial)}
                                     className="px-4 py-2 hover:bg-gray-500 cursor-pointer flex flex-col border-b border-gray-600 last:border-b-0"
                                 >
-                                    <span className="font-bold">{t.teacher}</span>
+                                    <span className="font-bold">{t.initial}</span>
                                     {t.name && <span className="text-sm text-gray-300">{t.name}</span>}
                                 </li>
                             ))}
@@ -427,5 +436,8 @@ const TeacherSearch = () => {
         </div>
     );
 };
+
+export default TeacherSearch;
+
 
 export { TeacherModal, TeacherSearch };
